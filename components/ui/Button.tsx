@@ -1,0 +1,27 @@
+import type { ButtonHTMLAttributes } from "react";
+
+type ButtonVariant = "primary" | "secondary";
+
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  variant?: ButtonVariant;
+};
+
+const variants: Record<ButtonVariant, string> = {
+  primary:
+    "border-transparent bg-[oklch(0.350_0.110_140)] text-white hover:bg-[oklch(0.300_0.105_140)]",
+  secondary:
+    "border-[oklch(0.900_0.006_145)] bg-white text-[oklch(0.180_0.018_145)] hover:bg-[oklch(0.985_0_0)]",
+};
+
+export function Button({
+  className = "",
+  variant = "primary",
+  ...props
+}: ButtonProps) {
+  return (
+    <button
+      {...props}
+      className={`inline-flex min-h-11 items-center justify-center rounded-[10px] border px-4 py-3 text-sm font-semibold leading-tight transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[oklch(0.350_0.110_140)] disabled:cursor-not-allowed disabled:border-transparent disabled:bg-[oklch(0.970_0.003_145)] disabled:text-[oklch(0.440_0.016_145)] ${variants[variant]} ${className}`}
+    />
+  );
+}
