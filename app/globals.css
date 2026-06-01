@@ -1,60 +1,60 @@
 @import "tailwindcss";
 
 :root {
-  --background: oklch(1 0 0);
-  --surface: oklch(0.985 0 0);
-  --surface-raised: oklch(0.97 0.003 145);
-  --border: oklch(0.9 0.006 145);
-  --ink: oklch(0.18 0.018 145);
-  --muted: oklch(0.44 0.016 145);
-  --primary: oklch(0.35 0.11 140);
-  --primary-hover: oklch(0.3 0.105 140);
-  --primary-soft: oklch(0.94 0.035 140);
-  --warning: oklch(0.62 0.145 72);
-  --warning-bg: oklch(0.975 0.03 72);
-  --warning-border: oklch(0.835 0.1 72);
-  --error: oklch(0.56 0.17 28);
-  --error-bg: oklch(0.975 0.028 28);
-  --error-border: oklch(0.83 0.105 28);
-  --success: oklch(0.44 0.12 145);
+    --background: oklch(1 0 0);
+    --surface: oklch(0.985 0 0);
+    --surface-raised: oklch(0.97 0.003 145);
+    --border: oklch(0.9 0.006 145);
+    --ink: oklch(0.18 0.018 145);
+    --muted: oklch(0.44 0.016 145);
+    --primary: oklch(0.35 0.11 140);
+    --primary-hover: oklch(0.3 0.105 140);
+    --primary-soft: oklch(0.94 0.035 140);
+    --warning: oklch(0.62 0.145 72);
+    --warning-bg: oklch(0.975 0.03 72);
+    --warning-border: oklch(0.835 0.1 72);
+    --error: oklch(0.56 0.17 28);
+    --error-bg: oklch(0.975 0.028 28);
+    --error-border: oklch(0.83 0.105 28);
+    --success: oklch(0.44 0.12 145);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-surface: var(--surface);
-  --color-surface-raised: var(--surface-raised);
-  --color-border: var(--border);
-  --color-ink: var(--ink);
-  --color-muted: var(--muted);
-  --color-primary: var(--primary);
-  --color-primary-hover: var(--primary-hover);
-  --color-primary-soft: var(--primary-soft);
-  --color-warning: var(--warning);
-  --color-warning-bg: var(--warning-bg);
-  --color-warning-border: var(--warning-border);
-  --color-error: var(--error);
-  --color-error-bg: var(--error-bg);
-  --color-error-border: var(--error-border);
-  --color-success: var(--success);
+    --color-background: var(--background);
+    --color-surface: var(--surface);
+    --color-surface-raised: var(--surface-raised);
+    --color-border: var(--border);
+    --color-ink: var(--ink);
+    --color-muted: var(--muted);
+    --color-primary: var(--primary);
+    --color-primary-hover: var(--primary-hover);
+    --color-primary-soft: var(--primary-soft);
+    --color-warning: var(--warning);
+    --color-warning-bg: var(--warning-bg);
+    --color-warning-border: var(--warning-border);
+    --color-error: var(--error);
+    --color-error-bg: var(--error-bg);
+    --color-error-border: var(--error-border);
+    --color-success: var(--success);
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 html {
-  min-height: 100%;
+    min-height: 100%;
 }
 
 body {
-  min-height: 100%;
-  margin: 0;
-  background: var(--background);
-  color: var(--ink);
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+    min-height: 100%;
+    margin: 0;
+    background: var(--background);
+    color: var(--ink);
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
 }

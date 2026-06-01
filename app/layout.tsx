@@ -3,7 +3,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Katalogin",
-  description: "Foto produk jadi draft listing siap edit untuk penjual Indonesia.",
+  description:
+    "Foto produk jadi draft listing siap edit untuk penjual Indonesia.",
 };
 
 export default function RootLayout({
