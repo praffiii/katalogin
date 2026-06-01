@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
+import { parseListingResponseText } from "@/lib/ai-response";
 import { buildListingPrompt } from "@/lib/prompt";
-import { listingResultSchema } from "@/lib/schemas";
 import type { GenerateListingRequest, ListingResult } from "@/types/listing";
 
 function getClient() {
@@ -10,16 +10,6 @@ function getClient() {
   }
 
   return new GoogleGenAI({ apiKey });
-}
-
-function extractJson(text: string) {
-  const trimmed = text.trim();
-  const withoutFence = trimmed
-    .replace(/^```json\s*/i, "")
-    .replace(/^```\s*/i, "")
-    .replace(/\s*```$/i, "");
-
-  return JSON.parse(withoutFence);
 }
 
 export async function generateListingWithGemini(
@@ -55,11 +45,5 @@ export async function generateListingWithGemini(
     throw new Error("Gemini returned empty text");
   }
 
-  const parsed = listingResultSchema.parse(extractJson(text));
-
-  if (!parsed.isProductPhoto) {
-    throw new Error("INVALID_PRODUCT_PHOTO");
-  }
-
-  return parsed;
+  return parseListingResponseText(text);
 }

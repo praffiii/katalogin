@@ -37,7 +37,7 @@ export function UploadStep({
           <h2 className="text-base font-semibold leading-snug text-ink">
             Foto produk
           </h2>
-          <p className="mt-1 text-sm leading-relaxed text-muted">
+          <p className="mt-1 max-w-[65ch] text-sm leading-relaxed text-muted">
             Satu foto saja. Foto tidak disimpan.
           </p>
         </div>
@@ -51,19 +51,41 @@ export function UploadStep({
                 className="aspect-[4/3] w-full object-contain"
               />
             </div>
-            <div className="flex flex-wrap items-center gap-2">
-              <FileDropzone
-                aria-label="Ganti foto produk"
-                className="min-h-0 flex-1 rounded-[10px] py-3"
-                onFileSelected={onFileSelected}
-              />
-              <Button type="button" variant="secondary" onClick={onRemoveFile}>
-                Hapus
-              </Button>
+            <div className="flex flex-col gap-3 rounded-[10px] border border-border bg-surface px-3 py-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="min-w-0">
+                <p className="truncate text-sm font-medium text-ink">
+                  {imageFile?.name || "Foto produk dipilih"}
+                </p>
+                <p className="mt-0.5 text-sm text-muted">
+                  JPG, PNG, atau WebP.
+                </p>
+              </div>
+              <div className="flex shrink-0 gap-2">
+                <label className="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-[10px] border border-border bg-white px-4 py-3 text-sm font-semibold leading-tight text-ink transition-colors hover:bg-surface focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-primary">
+                  Ganti foto
+                  <input
+                    aria-label="Ganti foto produk"
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    className="sr-only"
+                    onChange={(event) => {
+                      const file = event.target.files?.[0];
+                      if (file) {
+                        onFileSelected(file);
+                      }
+                      event.target.value = "";
+                    }}
+                  />
+                </label>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={onRemoveFile}
+                >
+                  Hapus
+                </Button>
+              </div>
             </div>
-            {imageFile ? (
-              <p className="text-sm text-muted">{imageFile.name}</p>
-            ) : null}
           </div>
         ) : (
           <FileDropzone onFileSelected={onFileSelected} />
@@ -81,7 +103,7 @@ export function UploadStep({
           <h2 className="text-base font-semibold leading-snug text-ink">
             Konteks opsional
           </h2>
-          <p className="mt-1 text-sm leading-relaxed text-muted">
+          <p className="mt-1 max-w-[65ch] text-sm leading-relaxed text-muted">
             Isi bila ada detail yang tidak terlihat di foto.
           </p>
         </div>

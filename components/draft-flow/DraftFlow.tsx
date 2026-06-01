@@ -170,20 +170,25 @@ export function DraftFlow() {
   }
 
   return (
-    <main className="min-h-screen bg-background px-4 py-6 text-ink sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-background px-4 py-5 text-ink sm:px-6 lg:px-8 lg:py-8">
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-5">
-        <header className="flex flex-col gap-1 border-b border-border pb-4">
-          <p className="text-sm font-semibold text-primary">Katalogin</p>
-          <h1 className="text-2xl font-bold leading-tight tracking-normal">
-            Foto produk jadi draft listing.
-          </h1>
-          <p className="max-w-2xl text-base leading-7 text-muted">
-            Buat judul, deskripsi, keyword, dan panduan harga dalam bahasa
-            Indonesia.
+        <header className="flex flex-col gap-3 border-b border-border pb-4 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+          <div className="max-w-2xl">
+            <p className="text-sm font-semibold text-primary">Katalogin</p>
+            <h1 className="mt-1 text-2xl font-bold leading-tight tracking-normal text-balance">
+              Foto produk jadi draft listing.
+            </h1>
+            <p className="mt-2 max-w-[65ch] text-base leading-7 text-muted text-pretty">
+              Buat judul, deskripsi, keyword, dan panduan harga dalam bahasa
+              Indonesia.
+            </p>
+          </div>
+          <p className="text-sm leading-relaxed text-muted sm:max-w-64 sm:text-right">
+            Tidak ada database atau penyimpanan foto.
           </p>
         </header>
 
-        <DraftProgress step={state.step} />
+        <DraftProgress hasPhoto={Boolean(state.imageFile)} step={state.step} />
 
         {state.step === "processing" ? (
           <ProcessingStep />

@@ -1,23 +1,34 @@
 # Katalogin
 
-Katalogin turns one product photo into an editable Indonesian marketplace listing draft.
+Katalogin turns one product photo into an editable Indonesian marketplace Listing Draft.
 
-The app is built for Indonesian micro-sellers who need a quick first draft for Shopee, Tokopedia, TikTok Shop, or similar marketplaces. A seller uploads one product photo, adds optional context, reviews the generated copy, edits uncertain details, then copies the result manually into a marketplace.
+It is built for Indonesian UMKM sellers who need a quick first draft for Shopee, Tokopedia, TikTok Shop, or similar marketplaces. A seller uploads one Product Photo, adds optional Seller Context, reviews and edits the generated Listing Copy, then copies the result manually into a marketplace.
 
-This is a focused portfolio project for full-stack product delivery and multimodal AI orchestration. It is not a catalog manager, SaaS dashboard, chatbot, or saved listing system.
+Katalogin is not a catalog manager, marketplace integration, chatbot, saved listing system, or trusted pricing engine.
+
+## Problem
+
+Early-stage sellers often have usable product photos but need help turning visible product details into natural Indonesian listing copy. Katalogin gives them a fast draft while keeping uncertain product facts visible for review.
+
+## MVP Flow
+
+1. Upload one Product Photo.
+2. Optionally add product name, condition, marketplace preference, and notes.
+3. Generate a Listing Draft through the server API route.
+4. Review and edit title, description, selling points, and SEO Keywords.
+5. Copy marketplace text or a fuller draft summary.
 
 ## Scope
 
-- Single-photo upload
-- Optional seller context
-- Indonesian listing title, description, keywords, and selling points
-- Price range estimate
-- Category recommendation
-- Warnings for uncertain or missing information
-- Editable review screen
-- Manual copy to clipboard
-- No database
-- No file storage
+- Single-photo upload.
+- Optional seller context.
+- Indonesian listing title, description, keywords, and selling points.
+- Price Guidance with rationale and confidence.
+- Category Suggestion.
+- Product Uncertainty warnings.
+- Editable review screen.
+- Manual clipboard copy.
+- No database or file storage.
 
 ## Stack
 
@@ -73,6 +84,10 @@ Browser
 ```
 
 State lives in the browser during the draft flow. The server route only proxies the AI request and validates input/output. There is no database or persisted upload.
+
+## Deployment Notes
+
+Deploy on Vercel or another Next.js-compatible host. Configure `GEMINI_API_KEY` and optional `GEMINI_MODEL` in the deployment environment. The API route uses the Node.js runtime and does not require persistent storage.
 
 ## License
 
