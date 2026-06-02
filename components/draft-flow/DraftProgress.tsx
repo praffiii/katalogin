@@ -1,6 +1,6 @@
 import { CheckIcon } from "@phosphor-icons/react";
 
-type DraftStep = "upload" | "context" | "processing" | "review";
+type DraftStep = "upload" | "photo" | "details" | "processing" | "review";
 
 type DraftProgressProps = {
   hasPhoto: boolean;
@@ -9,26 +9,28 @@ type DraftProgressProps = {
 
 const steps: Array<{ id: DraftStep; label: string }> = [
   { id: "upload", label: "Upload foto" },
-  { id: "context", label: "Konteks produk" },
-  { id: "processing", label: "Proses draft" },
+  { id: "photo", label: "Foto produk" },
+  { id: "details", label: "Detail listing" },
   { id: "review", label: "Review & salin" },
 ];
 
 const progressByStep: Record<DraftStep, number> = {
   upload: 0,
-  context: 33.33,
+  photo: 33.33,
+  details: 66.66,
   processing: 66.66,
   review: 100,
 };
 
 export function DraftProgress({ hasPhoto, step }: DraftProgressProps) {
-  const activeIndex = steps.findIndex((item) => item.id === step);
+  const activeStep = step === "processing" ? "details" : step;
+  const activeIndex = steps.findIndex((item) => item.id === activeStep);
 
   return (
     <nav aria-label="Progress draft listing">
       <ol className="grid grid-cols-4 text-xs font-semibold text-muted">
         {steps.map((item, index) => {
-          const isActive = item.id === step;
+          const isActive = item.id === activeStep;
           const isDone =
             index < activeIndex || (item.id === "upload" && hasPhoto);
 
