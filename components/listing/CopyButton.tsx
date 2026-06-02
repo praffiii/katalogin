@@ -9,7 +9,11 @@ type CopyButtonProps = {
   variant?: "primary" | "secondary";
 };
 
-export function CopyButton({ text, children, variant = "primary" }: CopyButtonProps) {
+export function CopyButton({
+  text,
+  children,
+  variant = "primary",
+}: CopyButtonProps) {
   const [copied, setCopied] = useState(false);
 
   async function handleCopy() {

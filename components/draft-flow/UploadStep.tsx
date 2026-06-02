@@ -31,37 +31,35 @@ export function UploadStep({
   onGenerate,
 }: UploadStepProps) {
   return (
-    <div className="grid gap-5 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
-      <section className="rounded-xl border border-border bg-white p-4 sm:p-6">
+    <div className="grid gap-8 lg:grid-cols-[minmax(320px,0.9fr)_minmax(0,1.1fr)] lg:gap-0">
+      <section className="surface-enter lg:pr-8">
         <div className="mb-4">
-          <h2 className="text-base font-semibold leading-snug text-ink">
+          <h2 className="text-lg font-semibold leading-snug text-ink">
             Foto produk
           </h2>
           <p className="mt-1 max-w-[65ch] text-sm leading-relaxed text-muted">
-            Satu foto saja. Foto tidak disimpan.
+            Unggah satu foto utama yang paling jelas.
           </p>
         </div>
 
         {previewUrl ? (
-          <div className="space-y-3">
-            <div className="overflow-hidden rounded-xl border border-border bg-surface">
+          <div className="photo-enter space-y-3">
+            <div className="overflow-hidden rounded-xl bg-surface">
               <img
                 src={previewUrl}
                 alt="Preview foto produk"
-                className="aspect-[4/3] w-full object-contain"
+                className="aspect-[4/3] w-full object-contain p-2"
               />
             </div>
-            <div className="flex flex-col gap-3 rounded-[10px] border border-border bg-surface px-3 py-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
                 <p className="truncate text-sm font-medium text-ink">
                   {imageFile?.name || "Foto produk dipilih"}
                 </p>
-                <p className="mt-0.5 text-sm text-muted">
-                  JPG, PNG, atau WebP.
-                </p>
+                <p className="mt-0.5 text-sm text-muted">JPG, PNG, atau WebP</p>
               </div>
-              <div className="flex shrink-0 gap-2">
-                <label className="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-[10px] border border-border bg-white px-4 py-3 text-sm font-semibold leading-tight text-ink transition-colors hover:bg-surface focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-primary">
+              <div className="grid w-full grid-cols-2 gap-2 sm:w-auto sm:grid-cols-[9rem_9rem]">
+                <label className="inline-flex min-h-11 w-full cursor-pointer items-center justify-center rounded-[10px] border border-border bg-white px-4 py-2 text-sm font-semibold leading-tight text-primary transition-colors hover:border-primary hover:bg-surface focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-primary">
                   Ganti foto
                   <input
                     aria-label="Ganti foto produk"
@@ -80,6 +78,7 @@ export function UploadStep({
                 <Button
                   type="button"
                   variant="secondary"
+                  className="min-h-11 w-full !rounded-[10px] !border !border-border !bg-white px-4 py-2 text-error hover:!border-error-border hover:!bg-surface hover:text-error"
                   onClick={onRemoveFile}
                 >
                   Hapus
@@ -93,19 +92,22 @@ export function UploadStep({
 
         {error ? (
           <Alert className="mt-4" variant="error">
+            <span className="block font-semibold">Foto belum bisa dipakai</span>
             {error}
           </Alert>
         ) : null}
       </section>
 
-      <section className="rounded-xl border border-border bg-white p-4 sm:p-6">
+      <section className="surface-enter border-t border-border pt-6 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
         <div className="mb-4">
-          <h2 className="text-base font-semibold leading-snug text-ink">
-            Konteks opsional
-          </h2>
-          <p className="mt-1 max-w-[65ch] text-sm leading-relaxed text-muted">
-            Isi bila ada detail yang tidak terlihat di foto.
-          </p>
+          <div>
+            <h2 className="text-lg font-semibold leading-snug text-ink">
+              Detail listing
+            </h2>
+            <p className="mt-1 max-w-[65ch] text-sm leading-relaxed text-muted">
+              Isi jika ada detail yang tidak terlihat di foto.
+            </p>
+          </div>
         </div>
 
         <div className="grid gap-4">
@@ -159,7 +161,7 @@ export function UploadStep({
           </div>
 
           <label className="grid gap-2 text-sm font-semibold text-ink">
-            Catatan tambahan
+            Detail tambahan
             <Textarea
               value={formValues.notes || ""}
               placeholder="Ukuran, bahan, warna, varian, atau info penting lain."
@@ -167,9 +169,16 @@ export function UploadStep({
             />
           </label>
 
-          <Button type="button" disabled={!imageFile} onClick={onGenerate}>
-            Buat draft listing
-          </Button>
+          <div className="sticky bottom-3 -mx-3 mt-2 bg-white/95 px-3 pt-3 sm:static sm:mx-0 sm:bg-transparent sm:px-0 sm:pt-0">
+            <Button
+              type="button"
+              className="w-full"
+              disabled={!imageFile}
+              onClick={onGenerate}
+            >
+              Buat draft listing
+            </Button>
+          </div>
         </div>
       </section>
     </div>

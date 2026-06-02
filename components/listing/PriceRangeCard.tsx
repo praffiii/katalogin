@@ -4,7 +4,10 @@ type PriceRangeCardProps = {
   priceEstimate: ListingResult["priceEstimate"];
 };
 
-const confidenceLabels: Record<ListingResult["priceEstimate"]["confidence"], string> = {
+const confidenceLabels: Record<
+  ListingResult["priceEstimate"]["confidence"],
+  string
+> = {
   low: "Rendah",
   medium: "Sedang",
   high: "Tinggi",
@@ -20,15 +23,17 @@ function formatIdr(value: number) {
 
 export function PriceRangeCard({ priceEstimate }: PriceRangeCardProps) {
   return (
-    <div className="rounded-xl border border-border bg-white p-4">
+    <section>
       <h3 className="text-sm font-semibold text-ink">Panduan harga</h3>
-      <p className="mt-2 text-lg font-bold text-primary">
+      <p className="mt-2 text-lg font-bold leading-snug text-primary">
         {formatIdr(priceEstimate.min)} - {formatIdr(priceEstimate.max)}
       </p>
-      <p className="mt-2 text-sm leading-relaxed text-muted">{priceEstimate.rationale}</p>
-      <p className="mt-2 text-xs font-semibold uppercase tracking-normal text-muted">
+      <p className="mt-2 text-sm leading-relaxed text-muted">
+        {priceEstimate.rationale}
+      </p>
+      <p className="mt-2 text-xs font-semibold text-muted">
         Keyakinan: {confidenceLabels[priceEstimate.confidence]}
       </p>
-    </div>
+    </section>
   );
 }

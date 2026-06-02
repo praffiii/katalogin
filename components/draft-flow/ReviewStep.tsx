@@ -8,5 +8,11 @@ type ReviewStepProps = {
 };
 
 export function ReviewStep({ result, onRegenerate, onReset }: ReviewStepProps) {
-  return <ListingResultEditor result={result} onRegenerate={onRegenerate} onReset={onReset} />;
+  return (
+    <ListingResultEditor
+      result={result}
+      onRegenerate={onRegenerate}
+      onReset={onReset}
+    />
+  );
 }

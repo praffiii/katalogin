@@ -170,46 +170,49 @@ export function DraftFlow() {
   }
 
   return (
-    <main className="min-h-screen bg-background px-4 py-5 text-ink sm:px-6 lg:px-8 lg:py-8">
-      <section className="mx-auto flex w-full max-w-6xl flex-col gap-5">
-        <header className="flex flex-col gap-3 border-b border-border pb-4 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
-          <div className="max-w-2xl">
-            <p className="text-sm font-semibold text-primary">Katalogin</p>
-            <h1 className="mt-1 text-2xl font-bold leading-tight tracking-normal text-balance">
-              Foto produk jadi draft listing.
-            </h1>
-            <p className="mt-2 max-w-[65ch] text-base leading-7 text-muted text-pretty">
-              Buat judul, deskripsi, keyword, dan panduan harga dalam bahasa
-              Indonesia.
-            </p>
+    <main className="builder-shell min-h-screen px-3 py-3 text-ink sm:px-6 sm:py-6 lg:px-8">
+      <section className="surface-enter mx-auto flex w-full max-w-7xl flex-col overflow-hidden bg-white">
+        <header className="flex flex-col gap-4 border-b border-border px-1 py-4 sm:px-0 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex min-w-0 items-start justify-between gap-4">
+            <div className="flex min-w-0 flex-col">
+              <div className="min-w-0">
+                <p className="text-2xl font-bold leading-tight text-primary">
+                  Katalogin
+                </p>
+                <h1 className="mt-1 text-lg font-semibold leading-snug text-ink text-balance sm:text-lg">
+                  Susun draft listing dari satu foto produk.
+                </h1>
+              </div>
+            </div>
           </div>
-          <p className="text-sm leading-relaxed text-muted sm:max-w-64 sm:text-right">
-            Tidak ada database atau penyimpanan foto.
-          </p>
         </header>
 
-        <DraftProgress hasPhoto={Boolean(state.imageFile)} step={state.step} />
+        <div className="border-b border-border py-3">
+          <DraftProgress hasPhoto={Boolean(state.imageFile)} step={state.step} />
+        </div>
 
-        {state.step === "processing" ? (
-          <ProcessingStep />
-        ) : state.step === "review" && state.result ? (
-          <ReviewStep
-            result={state.result}
-            onRegenerate={handleGenerate}
-            onReset={handleReset}
-          />
-        ) : (
-          <UploadStep
-            error={state.error}
-            formValues={state.formValues}
-            imageFile={state.imageFile}
-            previewUrl={state.previewUrl}
-            onFileSelected={handleFileSelected}
-            onFormChange={(values) => dispatch({ type: "setForm", values })}
-            onGenerate={handleGenerate}
-            onRemoveFile={handleRemoveFile}
-          />
-        )}
+        <div className="py-4 lg:py-6">
+          {state.step === "processing" ? (
+            <ProcessingStep />
+          ) : state.step === "review" && state.result ? (
+            <ReviewStep
+              result={state.result}
+              onRegenerate={handleGenerate}
+              onReset={handleReset}
+            />
+          ) : (
+            <UploadStep
+              error={state.error}
+              formValues={state.formValues}
+              imageFile={state.imageFile}
+              previewUrl={state.previewUrl}
+              onFileSelected={handleFileSelected}
+              onFormChange={(values) => dispatch({ type: "setForm", values })}
+              onGenerate={handleGenerate}
+              onRemoveFile={handleRemoveFile}
+            />
+          )}
+        </div>
       </section>
     </main>
   );

@@ -22,10 +22,16 @@ function normalizeLines(value: string) {
     .filter(Boolean);
 }
 
-export function ListingResultEditor({ result, onRegenerate, onReset }: ListingResultEditorProps) {
+export function ListingResultEditor({
+  result,
+  onRegenerate,
+  onReset,
+}: ListingResultEditorProps) {
   const [title, setTitle] = useState(result.title);
   const [description, setDescription] = useState(result.description);
-  const [sellingPoints, setSellingPoints] = useState(result.sellingPoints.join("\n"));
+  const [sellingPoints, setSellingPoints] = useState(
+    result.sellingPoints.join("\n"),
+  );
   const [keywords, setKeywords] = useState(result.seoKeywords.join(", "));
 
   const marketplaceCopy = useMemo(() => {
@@ -47,9 +53,14 @@ export function ListingResultEditor({ result, onRegenerate, onReset }: ListingRe
   }, [description, keywords, sellingPoints, title]);
 
   const summaryCopy = useMemo(() => {
-    const warnings = result.warnings.length > 0 ? `Peringatan: ${result.warnings.join(" ")}` : "";
+    const warnings =
+      result.warnings.length > 0
+        ? `Peringatan: ${result.warnings.join(" ")}`
+        : "";
     const alternatives =
-      result.category.alternatives.length > 0 ? `Alternatif: ${result.category.alternatives.join(", ")}` : "";
+      result.category.alternatives.length > 0
+        ? `Alternatif: ${result.category.alternatives.join(", ")}`
+        : "";
 
     return [
       marketplaceCopy,
@@ -65,35 +76,54 @@ export function ListingResultEditor({ result, onRegenerate, onReset }: ListingRe
   }, [marketplaceCopy, result.category, result.priceEstimate, result.warnings]);
 
   return (
-    <section className="grid gap-5 lg:grid-cols-[minmax(0,1.25fr)_minmax(280px,0.75fr)]">
-      <div className="rounded-xl border border-border bg-white p-4 sm:p-6">
-        <div className="mb-4">
-          <h2 className="text-base font-semibold leading-snug text-ink">Draft listing</h2>
-          <p className="mt-1 max-w-[65ch] text-sm leading-relaxed text-muted">Edit sebelum disalin ke marketplace.</p>
+    <section className="grid gap-4 lg:grid-cols-[minmax(0,1.24fr)_minmax(320px,0.76fr)]">
+      <div className="surface-enter rounded-xl border border-border bg-white p-4 sm:p-5">
+        <div className="mb-5">
+          <div>
+            <h2 className="text-lg font-semibold leading-snug text-ink">
+              Draft listing
+            </h2>
+            <p className="mt-1 max-w-[65ch] text-sm leading-relaxed text-muted">
+              Edit bagian yang perlu sebelum disalin ke marketplace.
+            </p>
+          </div>
         </div>
 
-        <div className="grid gap-4">
-          <label className="grid gap-2 text-sm font-semibold text-ink">
+        <div className="divide-y divide-border">
+          <label className="grid gap-2 pb-4 text-sm font-semibold text-ink">
             Judul
-            <Input value={title} onChange={(event) => setTitle(event.target.value)} />
+            <Input
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+            />
           </label>
 
-          <label className="grid gap-2 text-sm font-semibold text-ink">
+          <label className="grid gap-2 py-4 text-sm font-semibold text-ink">
             Deskripsi
-            <Textarea className="min-h-44" value={description} onChange={(event) => setDescription(event.target.value)} />
+            <Textarea
+              className="min-h-44"
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
+            />
           </label>
 
-          <label className="grid gap-2 text-sm font-semibold text-ink">
-            Selling point
-            <Textarea value={sellingPoints} onChange={(event) => setSellingPoints(event.target.value)} />
+          <label className="grid gap-2 py-4 text-sm font-semibold text-ink">
+            Fitur utama
+            <Textarea
+              value={sellingPoints}
+              onChange={(event) => setSellingPoints(event.target.value)}
+            />
           </label>
 
-          <label className="grid gap-2 text-sm font-semibold text-ink">
+          <label className="grid gap-2 py-4 text-sm font-semibold text-ink">
             Keyword
-            <Textarea value={keywords} onChange={(event) => setKeywords(event.target.value)} />
+            <Textarea
+              value={keywords}
+              onChange={(event) => setKeywords(event.target.value)}
+            />
           </label>
 
-          <div className="grid gap-2 sm:grid-cols-2">
+          <div className="grid gap-2 pt-4 sm:grid-cols-2">
             <CopyButton text={marketplaceCopy}>
               Salin untuk marketplace
             </CopyButton>
@@ -104,20 +134,28 @@ export function ListingResultEditor({ result, onRegenerate, onReset }: ListingRe
         </div>
       </div>
 
-      <aside className="space-y-4">
-        <PriceRangeCard priceEstimate={result.priceEstimate} />
-
+      <aside className="space-y-4 lg:sticky lg:top-6 lg:self-start">
         <div className="rounded-xl border border-border bg-white p-4">
-          <h3 className="text-sm font-semibold text-ink">Kategori</h3>
-          <p className="mt-2 text-sm leading-relaxed text-ink">{result.category.recommended}</p>
-          <p className="mt-1 text-xs font-semibold uppercase tracking-normal text-muted">
-            {result.category.marketplace}
-          </p>
-          {result.category.alternatives.length > 0 ? (
-            <p className="mt-2 text-sm leading-relaxed text-muted">
-              Alternatif: {result.category.alternatives.join(", ")}
-            </p>
-          ) : null}
+          <div className="divide-y divide-border">
+            <div className="pb-4">
+              <PriceRangeCard priceEstimate={result.priceEstimate} />
+            </div>
+
+            <section className="pt-4">
+              <h3 className="text-sm font-semibold text-ink">Kategori</h3>
+              <p className="mt-2 text-sm leading-relaxed text-ink">
+                {result.category.recommended}
+              </p>
+              <p className="mt-1 text-xs font-semibold text-muted">
+                {result.category.marketplace}
+              </p>
+              {result.category.alternatives.length > 0 ? (
+                <p className="mt-2 text-sm leading-relaxed text-muted">
+                  Alternatif: {result.category.alternatives.join(", ")}
+                </p>
+              ) : null}
+            </section>
+          </div>
         </div>
 
         {result.warnings.length > 0 ? (
@@ -127,13 +165,15 @@ export function ListingResultEditor({ result, onRegenerate, onReset }: ListingRe
           </Alert>
         ) : null}
 
-        <div className="grid gap-2">
-          <Button type="button" onClick={onRegenerate}>
-            Buat ulang
-          </Button>
-          <Button type="button" variant="secondary" onClick={onReset}>
-            Mulai lagi
-          </Button>
+        <div className="sticky bottom-3 rounded-xl border border-border bg-white p-3 sm:static">
+          <div className="grid gap-2">
+            <Button type="button" onClick={onRegenerate}>
+              Buat ulang
+            </Button>
+            <Button type="button" variant="secondary" onClick={onReset}>
+              Mulai lagi
+            </Button>
+          </div>
         </div>
       </aside>
     </section>
