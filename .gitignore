@@ -46,6 +46,13 @@ Thumbs.db
 *.pem
 *.p12
 *.jks
+*.log
+.eslintcache
+.turbo
+skills-lock.json
+
+# Test
+test-results/
 
 # Project
 .agents/

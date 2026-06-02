@@ -244,7 +244,10 @@ export function DraftFlow() {
         </header>
 
         <div className="border-b border-border py-3">
-          <DraftProgress hasPhoto={Boolean(state.imageFile)} step={state.step} />
+          <DraftProgress
+            hasPhoto={Boolean(state.imageFile)}
+            step={state.step}
+          />
         </div>
 
         <div className="py-4 lg:py-6">
