@@ -8,16 +8,20 @@ import { Textarea } from "@/components/ui/Textarea";
 import type { GenerateListingRequest, Marketplace } from "@/types/listing";
 
 type FormValues = Omit<GenerateListingRequest, "imageBase64" | "mimeType">;
+type DraftStep = "upload" | "photo" | "details";
 
 type UploadStepProps = {
   error: string | null;
   formValues: FormValues;
   imageFile: File | null;
   previewUrl: string | null;
+  step: DraftStep;
   onFileSelected: (file: File) => void;
   onRemoveFile: () => void;
   onFormChange: (values: Partial<FormValues>) => void;
   onGenerate: () => void;
+  onGoToDetails: () => void;
+  onGoToPhoto: () => void;
 };
 
 export function UploadStep({
@@ -25,14 +29,24 @@ export function UploadStep({
   formValues,
   imageFile,
   previewUrl,
+  step,
   onFileSelected,
   onRemoveFile,
   onFormChange,
   onGenerate,
+  onGoToDetails,
+  onGoToPhoto,
 }: UploadStepProps) {
+  const showPhotoSection = step !== "details";
+  const showDetailsSection = step === "details";
+
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(320px,0.9fr)_minmax(0,1.1fr)] lg:gap-0">
-      <section className="surface-enter lg:pr-8">
+      <section
+        className={`surface-enter lg:block lg:pr-8 ${
+          showPhotoSection ? "block" : "hidden"
+        }`}
+      >
         <div className="mb-4">
           <h2 className="text-lg font-semibold leading-snug text-ink">
             Foto produk
@@ -48,7 +62,7 @@ export function UploadStep({
               <img
                 src={previewUrl}
                 alt="Preview foto produk"
-                className="aspect-[4/3] w-full object-contain p-2"
+                className="h-56 w-full object-contain p-2 sm:h-80 lg:h-96"
               />
             </div>
             <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-start sm:justify-between">
@@ -85,6 +99,11 @@ export function UploadStep({
                 </Button>
               </div>
             </div>
+            <div className="sticky bottom-3 -mx-3 mt-4 bg-white/95 px-3 pt-3 lg:hidden">
+              <Button type="button" className="w-full" onClick={onGoToDetails}>
+                Lanjut ke detail
+              </Button>
+            </div>
           </div>
         ) : (
           <FileDropzone onFileSelected={onFileSelected} />
@@ -98,7 +117,13 @@ export function UploadStep({
         ) : null}
       </section>
 
-      <section className="surface-enter border-t border-border pt-6 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+      <section
+        className={`surface-enter border-border lg:block lg:border-l lg:pl-8 ${
+          showDetailsSection
+            ? "block"
+            : "hidden border-t pt-6 lg:border-t-0 lg:pt-0"
+        }`}
+      >
         <div className="mb-4">
           <div>
             <h2 className="text-lg font-semibold leading-snug text-ink">
@@ -115,7 +140,7 @@ export function UploadStep({
             Nama produk
             <Input
               value={formValues.productName || ""}
-              placeholder="Contoh: Tas rajut mini"
+              placeholder="Contoh: Jenis produk dan merek"
               onChange={(event) =>
                 onFormChange({ productName: event.target.value })
               }
@@ -152,7 +177,7 @@ export function UploadStep({
                   })
                 }
               >
-                <option value="general">Umum</option>
+                <option value="general">Marketplace umum</option>
                 <option value="shopee">Shopee</option>
                 <option value="tokopedia">Tokopedia</option>
                 <option value="tiktok">TikTok Shop</option>
@@ -177,6 +202,14 @@ export function UploadStep({
               onClick={onGenerate}
             >
               Buat draft listing
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              className="mt-3 w-full lg:hidden"
+              onClick={onGoToPhoto}
+            >
+              Kembali ke foto
             </Button>
           </div>
         </div>

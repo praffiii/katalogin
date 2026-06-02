@@ -12,7 +12,7 @@ import type {
   ListingResult,
 } from "@/types/listing";
 
-type DraftStep = "upload" | "context" | "processing" | "review";
+type DraftStep = "upload" | "photo" | "details" | "processing" | "review";
 type FormValues = Omit<GenerateListingRequest, "imageBase64" | "mimeType">;
 
 type DraftState = {
@@ -28,6 +28,8 @@ type DraftAction =
   | { type: "setFile"; file: File; previewUrl: string }
   | { type: "removeFile" }
   | { type: "setForm"; values: Partial<FormValues> }
+  | { type: "goToPhoto" }
+  | { type: "goToDetails" }
   | { type: "startProcessing" }
   | { type: "cancelProcessing" }
   | { type: "setResult"; result: ListingResult }
@@ -50,7 +52,7 @@ function reducer(state: DraftState, action: DraftAction): DraftState {
     case "setFile":
       return {
         ...state,
-        step: "context",
+        step: "photo",
         imageFile: action.file,
         previewUrl: action.previewUrl,
         error: null,
@@ -72,6 +74,18 @@ function reducer(state: DraftState, action: DraftAction): DraftState {
           ...action.values,
         },
       };
+    case "goToPhoto":
+      return {
+        ...state,
+        step: state.imageFile ? "photo" : "upload",
+        error: null,
+      };
+    case "goToDetails":
+      return {
+        ...state,
+        step: state.imageFile ? "details" : "upload",
+        error: null,
+      };
     case "startProcessing":
       return {
         ...state,
@@ -82,7 +96,7 @@ function reducer(state: DraftState, action: DraftAction): DraftState {
     case "cancelProcessing":
       return {
         ...state,
-        step: state.imageFile ? "context" : "upload",
+        step: state.imageFile ? "details" : "upload",
         result: null,
         error: null,
       };
@@ -96,7 +110,7 @@ function reducer(state: DraftState, action: DraftAction): DraftState {
     case "setError":
       return {
         ...state,
-        step: state.imageFile ? "context" : "upload",
+        step: state.imageFile ? "details" : "upload",
         result: null,
         error: action.error,
       };
@@ -110,6 +124,8 @@ function reducer(state: DraftState, action: DraftAction): DraftState {
 export function DraftFlow() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const generationAbortRef = useRef<AbortController | null>(null);
+  const uploadStep =
+    state.step === "photo" || state.step === "details" ? state.step : "upload";
 
   function revokePreview() {
     if (state.previewUrl) {
@@ -246,9 +262,12 @@ export function DraftFlow() {
               formValues={state.formValues}
               imageFile={state.imageFile}
               previewUrl={state.previewUrl}
+              step={uploadStep}
               onFileSelected={handleFileSelected}
               onFormChange={(values) => dispatch({ type: "setForm", values })}
               onGenerate={handleGenerate}
+              onGoToDetails={() => dispatch({ type: "goToDetails" })}
+              onGoToPhoto={() => dispatch({ type: "goToPhoto" })}
               onRemoveFile={handleRemoveFile}
             />
           )}
