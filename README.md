@@ -1,34 +1,38 @@
 # Katalogin
 
-Katalogin turns one product photo into an editable Indonesian marketplace Listing Draft.
+Katalogin turns one product photo plus optional seller context into an editable Indonesian marketplace Listing Draft.
 
-It is built for Indonesian UMKM sellers who need a quick first draft for Shopee, Tokopedia, TikTok Shop, or similar marketplaces. A seller uploads one Product Photo, adds optional Seller Context, reviews and edits the generated Listing Copy, then copies the result manually into a marketplace.
+It is built for Indonesian early-stage UMKM sellers who need a useful first draft for Shopee, Tokopedia, TikTok Shop, or similar marketplaces without learning prompt engineering or managing a heavy catalog tool.
 
-Katalogin is not a catalog manager, marketplace integration, chatbot, saved listing system, or trusted pricing engine.
+Katalogin is a draft workspace, not a marketplace integration. Sellers review, edit, and manually copy the result.
 
-## Problem
+## What It Demonstrates
 
-Early-stage sellers often have usable product photos but need help turning visible product details into natural Indonesian listing copy. Katalogin gives them a fast draft while keeping uncertain product facts visible for review.
+- Multimodal AI flow from product photo to structured Indonesian Listing Copy.
+- Server-side request and response validation with Zod.
+- Honest handling of Product Uncertainty instead of invented facts.
+- Editable seller review flow before copy-out.
+- Lightweight no-storage architecture suitable for a focused MVP.
 
-## MVP Flow
+## Product Scope
+
+Katalogin supports one temporary Draft Session:
 
 1. Upload one Product Photo.
-2. Optionally add product name, condition, marketplace preference, and notes.
+2. Optionally add Seller Context such as product name, condition, marketplace preference, and notes.
 3. Generate a Listing Draft through the server API route.
-4. Review and edit title, description, selling points, and SEO Keywords.
-5. Copy marketplace text or a fuller draft summary.
+4. Review and edit title, description, selling points, SEO Keywords, Category Suggestion, and Price Guidance.
+5. Copy marketplace-ready text or a fuller seller summary for manual use elsewhere.
 
-## Scope
+The MVP intentionally does not include:
 
-- Single-photo upload.
-- Optional seller context.
-- Indonesian listing title, description, keywords, and selling points.
-- Price Guidance with rationale and confidence.
-- Category Suggestion.
-- Product Uncertainty warnings.
-- Editable review screen.
-- Manual clipboard copy.
-- No database or file storage.
+- Marketplace publishing, sync, or export.
+- Product catalog management.
+- Saved listings or listing history.
+- Database or file storage.
+- Chatbot interaction.
+- Live market research or trusted price estimation.
+- Product photo editing, enhancement, or background removal.
 
 ## Stack
 
@@ -44,15 +48,19 @@ Early-stage sellers often have usable product photos but need help turning visib
 
 ## Local Development
 
+Install dependencies:
+
 ```bash
 pnpm install
-cp .env.example .env.local
-pnpm dev
 ```
 
-Open `http://localhost:3000`.
+Create local environment file:
 
-Required environment variables:
+```bash
+cp .env.example .env.local
+```
+
+Set required variables:
 
 ```txt
 GEMINI_API_KEY=
@@ -60,6 +68,14 @@ GEMINI_MODEL=gemini-2.0-flash
 ```
 
 Get a Gemini API key from Google AI Studio.
+
+Start development server:
+
+```bash
+pnpm dev
+```
+
+Open `http://localhost:3000`.
 
 ## Scripts
 
@@ -74,20 +90,54 @@ pnpm start
 
 ```txt
 Browser
-  -> upload product photo
+  -> upload one Product Photo
   -> convert image to base64
+  -> collect optional Seller Context
   -> POST /api/generate-listing
   -> validate request with Zod
   -> call Gemini Flash
   -> validate structured JSON response
-  -> return editable listing draft
+  -> return editable Listing Draft
 ```
 
-State lives in the browser during the draft flow. The server route only proxies the AI request and validates input/output. There is no database or persisted upload.
+State lives in the browser during the Draft Flow. The API route proxies the AI request, validates input and output, and returns structured draft data. Katalogin does not persist photos, drafts, or Draft Sessions.
 
-## Deployment Notes
+Key files:
 
-Deploy on Vercel or another Next.js-compatible host. Configure `GEMINI_API_KEY` and optional `GEMINI_MODEL` in the deployment environment. The API route uses the Node.js runtime and does not require persistent storage.
+| Area | Path |
+| --- | --- |
+| Draft Flow UI | `components/draft-flow/DraftFlow.tsx` |
+| Review editor | `components/listing/ListingResultEditor.tsx` |
+| API route | `app/api/generate-listing/route.ts` |
+| Gemini client | `lib/gemini.ts` |
+| Prompt construction | `lib/prompt.ts` |
+| Schemas | `lib/schemas.ts` |
+
+## Verification
+
+Run lint:
+
+```bash
+pnpm lint
+```
+
+Run production build:
+
+```bash
+pnpm build
+```
+
+## Deployment
+
+Deploy on Vercel or another Next.js-compatible host. Configure `GEMINI_API_KEY` and optional `GEMINI_MODEL` in the deployment environment.
+
+The API route uses the Node.js runtime and does not require persistent storage.
+
+## Project References
+
+- Product references: `docs/resources/reference-requirement`
+- Visual references: `docs/resources/reference-design`
+- Design constraints: `.impeccable/design.json`
 
 ## License
 
