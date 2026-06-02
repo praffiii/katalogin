@@ -1,5 +1,6 @@
 import { Skeleton } from "@/components/ui/Skeleton";
-import { CheckIcon, InfoIcon } from "@phosphor-icons/react";
+import { Button } from "@/components/ui/Button";
+import { CheckIcon, InfoIcon, XIcon } from "@phosphor-icons/react";
 
 const messages = [
   "Menganalisis foto produk",
@@ -13,7 +14,11 @@ const previewRows = [
   { label: "Keyword", width: "w-2/3" },
 ];
 
-export function ProcessingStep() {
+type ProcessingStepProps = {
+  onCancel: () => void;
+};
+
+export function ProcessingStep({ onCancel }: ProcessingStepProps) {
   return (
     <section className="surface-enter mx-auto flex w-full max-w-xl flex-col overflow-hidden rounded-xl border border-border bg-[linear-gradient(180deg,white_0%,oklch(0.992_0.004_145)_100%)] p-4 sm:p-6">
       <div className="flex justify-center">
@@ -85,6 +90,18 @@ export function ProcessingStep() {
         <p className="text-sm font-semibold leading-relaxed">
           Proses ini biasanya selesai dalam 10 sampai 20 detik.
         </p>
+      </div>
+
+      <div className="mt-5 flex justify-center">
+        <Button
+          type="button"
+          variant="danger"
+          onClick={onCancel}
+          className="w-full sm:w-auto"
+        >
+          <XIcon aria-hidden="true" size={18} weight="bold" />
+          Batalkan proses
+        </Button>
       </div>
     </section>
   );

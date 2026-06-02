@@ -14,6 +14,7 @@ function getClient() {
 
 export async function generateListingWithGemini(
   input: GenerateListingRequest,
+  abortSignal?: AbortSignal,
 ): Promise<ListingResult> {
   const ai = getClient();
   const model = process.env.GEMINI_MODEL || "gemini-2.0-flash";
@@ -21,6 +22,9 @@ export async function generateListingWithGemini(
 
   const response = await ai.models.generateContent({
     model,
+    config: {
+      abortSignal,
+    },
     contents: [
       {
         role: "user",

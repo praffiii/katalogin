@@ -28,13 +28,24 @@ export async function POST(request: Request) {
       );
     }
 
-    const data = await generateListingWithGemini(parsed.data);
+    if (request.signal.aborted) {
+      return new Response(null, { status: 499 });
+    }
+
+    const data = await generateListingWithGemini(parsed.data, request.signal);
 
     return NextResponse.json<GenerateListingResponse>({
       ok: true,
       data,
     });
   } catch (error) {
+    if (
+      request.signal.aborted ||
+      (error instanceof DOMException && error.name === "AbortError")
+    ) {
+      return new Response(null, { status: 499 });
+    }
+
     const message = error instanceof Error ? error.message.toLowerCase() : "";
 
     if (message.includes("quota") || message.includes("rate")) {

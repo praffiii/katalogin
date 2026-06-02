@@ -1,6 +1,6 @@
 "use client";
 
-import { useReducer } from "react";
+import { useReducer, useRef } from "react";
 import { DraftProgress } from "@/components/draft-flow/DraftProgress";
 import { ProcessingStep } from "@/components/draft-flow/ProcessingStep";
 import { ReviewStep } from "@/components/draft-flow/ReviewStep";
@@ -29,6 +29,7 @@ type DraftAction =
   | { type: "removeFile" }
   | { type: "setForm"; values: Partial<FormValues> }
   | { type: "startProcessing" }
+  | { type: "cancelProcessing" }
   | { type: "setResult"; result: ListingResult }
   | { type: "setError"; error: string }
   | { type: "reset" };
@@ -78,6 +79,13 @@ function reducer(state: DraftState, action: DraftAction): DraftState {
         result: null,
         error: null,
       };
+    case "cancelProcessing":
+      return {
+        ...state,
+        step: state.imageFile ? "context" : "upload",
+        result: null,
+        error: null,
+      };
     case "setResult":
       return {
         ...state,
@@ -101,6 +109,7 @@ function reducer(state: DraftState, action: DraftAction): DraftState {
 
 export function DraftFlow() {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const generationAbortRef = useRef<AbortController | null>(null);
 
   function revokePreview() {
     if (state.previewUrl) {
@@ -133,15 +142,26 @@ export function DraftFlow() {
       return;
     }
 
+    generationAbortRef.current?.abort();
+
+    const abortController = new AbortController();
+    generationAbortRef.current = abortController;
+
     dispatch({ type: "startProcessing" });
 
     try {
       const imageBase64 = await fileToBase64(state.imageFile);
+
+      if (abortController.signal.aborted) {
+        return;
+      }
+
       const response = await fetch("/api/generate-listing", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        signal: abortController.signal,
         body: JSON.stringify({
           ...state.formValues,
           imageBase64,
@@ -150,21 +170,41 @@ export function DraftFlow() {
       });
       const payload = (await response.json()) as GenerateListingResponse;
 
+      if (abortController.signal.aborted) {
+        return;
+      }
+
       if (!payload.ok) {
         dispatch({ type: "setError", error: payload.error.message });
         return;
       }
 
       dispatch({ type: "setResult", result: payload.data });
-    } catch {
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") {
+        return;
+      }
+
       dispatch({
         type: "setError",
         error: "Terjadi kendala. Coba lagi dalam beberapa saat.",
       });
+    } finally {
+      if (generationAbortRef.current === abortController) {
+        generationAbortRef.current = null;
+      }
     }
   }
 
+  function handleCancelGenerate() {
+    generationAbortRef.current?.abort();
+    generationAbortRef.current = null;
+    dispatch({ type: "cancelProcessing" });
+  }
+
   function handleReset() {
+    generationAbortRef.current?.abort();
+    generationAbortRef.current = null;
     revokePreview();
     dispatch({ type: "reset" });
   }
@@ -193,7 +233,7 @@ export function DraftFlow() {
 
         <div className="py-4 lg:py-6">
           {state.step === "processing" ? (
-            <ProcessingStep />
+            <ProcessingStep onCancel={handleCancelGenerate} />
           ) : state.step === "review" && state.result ? (
             <ReviewStep
               result={state.result}
