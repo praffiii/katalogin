@@ -1,10 +1,10 @@
-# Katalogin
+# Listify
 
-Katalogin turns one product photo plus optional seller context into an editable Indonesian marketplace Listing Draft.
+Listify turns one product photo plus optional seller context into an editable Indonesian marketplace Listing Draft.
 
 It is built for Indonesian early-stage UMKM sellers who need a useful first draft for Shopee, Tokopedia, TikTok Shop, or similar marketplaces without learning prompt engineering or managing a heavy catalog tool.
 
-Katalogin is a draft workspace, not a marketplace integration. Sellers review, edit, and manually copy the result.
+Listify is a draft workspace, not a marketplace integration. Sellers review, edit, and manually copy the result.
 
 ## What It Demonstrates
 
@@ -16,7 +16,7 @@ Katalogin is a draft workspace, not a marketplace integration. Sellers review, e
 
 ## Product Scope
 
-Katalogin supports one temporary Draft Session:
+Listify supports one temporary Draft Session:
 
 1. Upload one Product Photo.
 2. Optionally add Seller Context such as product name, condition, marketplace preference, and notes.
@@ -100,7 +100,7 @@ Browser
   -> return editable Listing Draft
 ```
 
-State lives in the browser during the Draft Flow. The API route proxies the AI request, validates input and output, and returns structured draft data. Katalogin does not persist photos, drafts, or Draft Sessions.
+State lives in the browser during the Draft Flow. The API route proxies the AI request, validates input and output, and returns structured draft data. Listify does not persist photos, drafts, or Draft Sessions.
 
 Key files:
 

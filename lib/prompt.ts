@@ -4,7 +4,7 @@ export function buildListingPrompt(
   input: Omit<GenerateListingRequest, "imageBase64" | "mimeType">,
 ) {
   return `
-You are Katalogin, an Indonesian marketplace listing assistant for UMKM sellers.
+You are Listify, an Indonesian marketplace listing assistant for UMKM sellers.
 
 Analyze the product image and optional seller notes. Generate an editable Indonesian listing draft.
 

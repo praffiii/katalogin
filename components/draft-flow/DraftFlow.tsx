@@ -233,7 +233,7 @@ export function DraftFlow() {
             <div className="flex min-w-0 flex-col">
               <div className="min-w-0">
                 <p className="text-2xl font-bold leading-tight text-primary">
-                  Katalogin
+                  Listify
                 </p>
                 <h1 className="mt-1 text-lg font-semibold leading-snug text-ink text-balance sm:text-lg">
                   Susun draft listing dari satu foto produk.
