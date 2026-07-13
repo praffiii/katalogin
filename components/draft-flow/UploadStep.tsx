@@ -1,5 +1,3 @@
-"use client";
-
 import { Alert } from "@/components/ui/Alert";
 import { Button } from "@/components/ui/Button";
 import { FileDropzone } from "@/components/ui/FileDropzone";
@@ -41,14 +39,25 @@ export function UploadStep({
   const showDetailsSection = step === "details";
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[minmax(320px,0.9fr)_minmax(0,1.1fr)] lg:gap-0">
-      <section
+    <>
+      {error ? (
+        <Alert className="mb-4" variant="error">
+          <span className="block font-semibold">Draft belum bisa dibuat</span>
+          {error}
+        </Alert>
+      ) : null}
+      <div className="grid gap-8 lg:grid-cols-[minmax(320px,0.9fr)_minmax(0,1.1fr)] lg:gap-0">
+        <section
         className={`surface-enter lg:block lg:pr-8 ${
           showPhotoSection ? "block" : "hidden"
         }`}
       >
         <div className="mb-4">
-          <h2 className="text-lg font-semibold leading-snug text-ink">
+          <h2
+            data-stage-heading={showPhotoSection ? "true" : undefined}
+            tabIndex={-1}
+            className="text-lg font-semibold leading-snug text-ink outline-none"
+          >
             Foto produk
           </h2>
           <p className="mt-1 max-w-[65ch] text-sm leading-relaxed text-muted">
@@ -73,7 +82,7 @@ export function UploadStep({
                 <p className="mt-0.5 text-sm text-muted">JPG, PNG, atau WebP</p>
               </div>
               <div className="grid w-full grid-cols-2 gap-2 sm:w-auto sm:grid-cols-[9rem_9rem]">
-                <label className="inline-flex min-h-11 w-full cursor-pointer items-center justify-center rounded-[10px] border border-border bg-white px-4 py-2 text-sm font-semibold leading-tight text-primary transition-colors hover:border-primary hover:bg-surface focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-primary">
+                <label className="inline-flex min-h-11 w-full cursor-pointer items-center justify-center rounded-[10px] border border-control-border bg-white px-4 py-2 text-sm font-semibold leading-tight text-primary transition-colors hover:border-primary hover:bg-surface focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-primary">
                   Ganti foto
                   <input
                     aria-label="Ganti foto produk"
@@ -109,13 +118,11 @@ export function UploadStep({
           <FileDropzone onFileSelected={onFileSelected} />
         )}
 
-        {error ? (
-          <Alert className="mt-4" variant="error">
-            <span className="block font-semibold">Foto belum bisa dipakai</span>
-            {error}
-          </Alert>
-        ) : null}
-      </section>
+          <p className="mt-4 text-xs leading-relaxed text-muted">
+            Foto dan konteks dikirim ke Google Gemini untuk membuat draft.
+            Data tidak disimpan secara permanen oleh Listify.
+          </p>
+        </section>
 
       <section
         className={`surface-enter border-border lg:block lg:border-l lg:pl-8 ${
@@ -126,7 +133,11 @@ export function UploadStep({
       >
         <div className="mb-4">
           <div>
-            <h2 className="text-lg font-semibold leading-snug text-ink">
+            <h2
+              data-stage-heading={showDetailsSection ? "true" : undefined}
+              tabIndex={-1}
+              className="text-lg font-semibold leading-snug text-ink outline-none"
+            >
               Detail listing
             </h2>
             <p className="mt-1 max-w-[65ch] text-sm leading-relaxed text-muted">
@@ -137,8 +148,9 @@ export function UploadStep({
 
         <div className="grid gap-4">
           <label className="grid gap-2 text-sm font-semibold text-ink">
-            Nama produk
+            Nama produk (opsional)
             <Input
+              maxLength={120}
               value={formValues.productName || ""}
               placeholder="Contoh: Jenis produk dan merek"
               onChange={(event) =>
@@ -149,9 +161,9 @@ export function UploadStep({
 
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="grid gap-2 text-sm font-semibold text-ink">
-              Kondisi
+              Kondisi (opsional)
               <select
-                className="min-h-11 rounded-[10px] border border-border bg-white px-3.5 py-3 text-base font-normal text-ink outline-none focus:border-primary focus:ring-2 focus:ring-primary-soft"
+                className="min-h-11 rounded-[10px] border border-control-border bg-white px-3.5 py-3 text-base font-normal text-ink outline-none focus:border-primary focus:ring-2 focus:ring-primary-soft"
                 value={formValues.condition || ""}
                 onChange={(event) =>
                   onFormChange({
@@ -167,9 +179,9 @@ export function UploadStep({
             </label>
 
             <label className="grid gap-2 text-sm font-semibold text-ink">
-              Marketplace
+              Preferensi marketplace (opsional)
               <select
-                className="min-h-11 rounded-[10px] border border-border bg-white px-3.5 py-3 text-base font-normal text-ink outline-none focus:border-primary focus:ring-2 focus:ring-primary-soft"
+                className="min-h-11 rounded-[10px] border border-control-border bg-white px-3.5 py-3 text-base font-normal text-ink outline-none focus:border-primary focus:ring-2 focus:ring-primary-soft"
                 value={formValues.marketplace || "general"}
                 onChange={(event) =>
                   onFormChange({
@@ -186,8 +198,9 @@ export function UploadStep({
           </div>
 
           <label className="grid gap-2 text-sm font-semibold text-ink">
-            Detail tambahan
+            Catatan tambahan (opsional)
             <Textarea
+              maxLength={500}
               value={formValues.notes || ""}
               placeholder="Ukuran, bahan, warna, varian, atau info penting lain."
               onChange={(event) => onFormChange({ notes: event.target.value })}
@@ -213,7 +226,8 @@ export function UploadStep({
             </Button>
           </div>
         </div>
-      </section>
-    </div>
+        </section>
+      </div>
+    </>
   );
 }

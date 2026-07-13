@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/Skeleton";
 import { Button } from "@/components/ui/Button";
-import { CheckIcon, InfoIcon, XIcon } from "@phosphor-icons/react";
+import { InfoIcon, XIcon } from "@phosphor-icons/react";
 
 const messages = [
   "Menganalisis foto produk",
@@ -20,7 +20,12 @@ type ProcessingStepProps = {
 
 export function ProcessingStep({ onCancel }: ProcessingStepProps) {
   return (
-    <section className="surface-enter mx-auto flex w-full max-w-xl flex-col overflow-hidden rounded-xl border border-border bg-[linear-gradient(180deg,white_0%,oklch(0.992_0.004_145)_100%)] p-4 sm:p-6">
+    <section
+      role="status"
+      aria-live="polite"
+      aria-busy="true"
+      className="surface-enter mx-auto flex w-full max-w-xl flex-col overflow-hidden rounded-xl border border-border bg-[linear-gradient(180deg,white_0%,oklch(0.992_0.004_145)_100%)] p-4 sm:p-6"
+    >
       <div className="flex justify-center">
         <div className="processing-illustration relative flex h-28 w-28 items-center justify-center rounded-full bg-primary-soft">
           <div className="relative h-[74px] w-14 rounded-[10px] border-2 border-primary bg-white">
@@ -35,9 +40,17 @@ export function ProcessingStep({ onCancel }: ProcessingStepProps) {
       </div>
 
       <div className="mt-7 text-center">
-        <h2 className="mx-auto max-w-sm text-balance text-2xl font-bold leading-tight text-ink">
+        <h2
+          data-stage-heading
+          tabIndex={-1}
+          className="mx-auto max-w-sm text-balance text-2xl font-bold leading-tight text-ink outline-none"
+        >
           Kami sedang menyiapkan draft listing Anda
         </h2>
+        <p className="mt-2 text-sm leading-relaxed text-muted">
+          Proses berjalan secara otomatis. Tahap rinci tidak ditampilkan karena
+          AI memprosesnya sebagai satu permintaan.
+        </p>
       </div>
 
       <div className="mt-7 space-y-4">
@@ -47,8 +60,11 @@ export function ProcessingStep({ onCancel }: ProcessingStepProps) {
             className="surface-enter flex items-start gap-3 text-sm font-semibold leading-snug text-ink"
             style={{ animationDelay: `${index * 90}ms` }}
           >
-            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-primary text-xs font-bold text-primary">
-              <CheckIcon aria-hidden="true" size={14} weight="bold" />
+            <span
+              aria-hidden="true"
+              className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-primary"
+            >
+              <span className="h-2 w-2 animate-pulse rounded-full bg-primary" />
             </span>
             {message}
           </p>

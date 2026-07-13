@@ -1,29 +1,37 @@
 import { CheckIcon } from "@phosphor-icons/react";
 
 type DraftStep = "upload" | "photo" | "details" | "processing" | "review";
+type ProgressStep = "upload" | "context" | "processing" | "review";
 
 type DraftProgressProps = {
   hasPhoto: boolean;
   step: DraftStep;
 };
 
-const steps: Array<{ id: DraftStep; label: string }> = [
-  { id: "upload", label: "Upload foto" },
-  { id: "photo", label: "Foto produk" },
-  { id: "details", label: "Detail listing" },
-  { id: "review", label: "Review & salin" },
+const steps: Array<{ id: ProgressStep; label: string }> = [
+  { id: "upload", label: "Upload" },
+  { id: "context", label: "Konteks" },
+  { id: "processing", label: "Proses" },
+  { id: "review", label: "Review" },
 ];
 
-const progressByStep: Record<DraftStep, number> = {
+const activeStepByDraftStep: Record<DraftStep, ProgressStep> = {
+  upload: "upload",
+  photo: "upload",
+  details: "context",
+  processing: "processing",
+  review: "review",
+};
+
+const progressByStep: Record<ProgressStep, number> = {
   upload: 0,
-  photo: 33.33,
-  details: 66.66,
-  processing: 66.66,
+  context: 33,
+  processing: 66,
   review: 100,
 };
 
 export function DraftProgress({ hasPhoto, step }: DraftProgressProps) {
-  const activeStep = step === "processing" ? "details" : step;
+  const activeStep = activeStepByDraftStep[step];
   const activeIndex = steps.findIndex((item) => item.id === activeStep);
 
   return (
@@ -64,7 +72,7 @@ export function DraftProgress({ hasPhoto, step }: DraftProgressProps) {
                     index + 1
                   )}
                 </span>
-                <span className="hidden truncate sm:block">{item.label}</span>
+                <span className="truncate">{item.label}</span>
               </span>
             </li>
           );
@@ -72,7 +80,7 @@ export function DraftProgress({ hasPhoto, step }: DraftProgressProps) {
       </ol>
       <div
         className="sr-only"
-        aria-label={`Progress ${step === "upload" && !hasPhoto ? 0 : progressByStep[step]} persen`}
+        aria-label={`Progress ${progressByStep[activeStep]} persen`}
       />
     </nav>
   );

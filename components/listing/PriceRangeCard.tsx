@@ -13,12 +13,14 @@ const confidenceLabels: Record<
   high: "Tinggi",
 };
 
+const idrFormatter = new Intl.NumberFormat("id-ID", {
+  style: "currency",
+  currency: "IDR",
+  maximumFractionDigits: 0,
+});
+
 function formatIdr(value: number) {
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    maximumFractionDigits: 0,
-  }).format(value);
+  return idrFormatter.format(value);
 }
 
 export function PriceRangeCard({ priceEstimate }: PriceRangeCardProps) {

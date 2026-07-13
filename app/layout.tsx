@@ -3,8 +3,9 @@ import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Listify — AI Pembuat Listing Shopee & Tokopedia (Gratis)",
-  description: "Upload foto produk, langsung dapat judul SEO, deskripsi menjual, estimasi harga, dan keyword marketplace. Dibuat khusus untuk penjual UMKM Indonesia.",
+  title: "Listify — Draft Listing Marketplace dengan AI",
+  description:
+    "Buat dan edit draft judul, deskripsi, kata kunci, kategori, dan panduan harga marketplace dari foto produk untuk penjual UMKM Indonesia.",
 };
 
 export default function RootLayout({

@@ -1,34 +1,15 @@
-export type Marketplace = "shopee" | "tokopedia" | "tiktok" | "general";
+import type { z } from "zod";
+import type {
+  generateListingRequestSchema,
+  listingResultSchema,
+  marketplaceSchema,
+} from "@/lib/schemas";
 
-export type GenerateListingRequest = {
-  imageBase64: string;
-  mimeType: "image/jpeg" | "image/png" | "image/webp";
-  productName?: string;
-  condition?: "new" | "used";
-  marketplace?: Marketplace;
-  notes?: string;
-};
-
-export type ListingResult = {
-  isProductPhoto: boolean;
-  title: string;
-  seoKeywords: string[];
-  description: string;
-  priceEstimate: {
-    min: number;
-    max: number;
-    currency: "IDR";
-    confidence: "low" | "medium" | "high";
-    rationale: string;
-  };
-  category: {
-    marketplace: string;
-    recommended: string;
-    alternatives: string[];
-  };
-  sellingPoints: string[];
-  warnings: string[];
-};
+export type Marketplace = z.infer<typeof marketplaceSchema>;
+export type GenerateListingRequest = z.infer<
+  typeof generateListingRequestSchema
+>;
+export type ListingResult = z.infer<typeof listingResultSchema>;
 
 export type ApiSuccess = {
   ok: true;
@@ -39,14 +20,20 @@ export type ApiError = {
   ok: false;
   error: {
     code:
+      | "INVALID_REQUEST"
       | "INVALID_IMAGE"
+      | "UNSUPPORTED_MEDIA_TYPE"
       | "INVALID_PRODUCT_PHOTO"
       | "IMAGE_TOO_LARGE"
       | "AI_TIMEOUT"
       | "AI_INVALID_RESPONSE"
       | "RATE_LIMITED"
+      | "CONCURRENCY_LIMITED"
+      | "SERVICE_UNAVAILABLE"
       | "UNKNOWN";
     message: string;
+    requestId?: string;
+    fields?: Record<string, string[]>;
   };
 };
 

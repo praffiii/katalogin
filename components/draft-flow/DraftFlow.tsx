@@ -1,6 +1,6 @@
 "use client";
 
-import { useReducer, useRef } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import { DraftProgress } from "@/components/draft-flow/DraftProgress";
 import { ProcessingStep } from "@/components/draft-flow/ProcessingStep";
 import { ReviewStep } from "@/components/draft-flow/ReviewStep";
@@ -124,12 +124,37 @@ function reducer(state: DraftState, action: DraftAction): DraftState {
 export function DraftFlow() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const generationAbortRef = useRef<AbortController | null>(null);
+  const previewUrlRef = useRef<string | null>(null);
+  const stageContainerRef = useRef<HTMLDivElement | null>(null);
+  const previousStepRef = useRef(state.step);
   const uploadStep =
     state.step === "photo" || state.step === "details" ? state.step : "upload";
 
+  useEffect(() => {
+    if (previousStepRef.current === state.step) {
+      return;
+    }
+
+    previousStepRef.current = state.step;
+    stageContainerRef.current
+      ?.querySelector<HTMLElement>("[data-stage-heading]")
+      ?.focus({ preventScroll: true });
+  }, [state.step]);
+
+  useEffect(
+    () => () => {
+      generationAbortRef.current?.abort();
+      if (previewUrlRef.current) {
+        URL.revokeObjectURL(previewUrlRef.current);
+      }
+    },
+    [],
+  );
+
   function revokePreview() {
-    if (state.previewUrl) {
-      URL.revokeObjectURL(state.previewUrl);
+    if (previewUrlRef.current) {
+      URL.revokeObjectURL(previewUrlRef.current);
+      previewUrlRef.current = null;
     }
   }
 
@@ -141,7 +166,9 @@ export function DraftFlow() {
     }
 
     revokePreview();
-    dispatch({ type: "setFile", file, previewUrl: URL.createObjectURL(file) });
+    const previewUrl = URL.createObjectURL(file);
+    previewUrlRef.current = previewUrl;
+    dispatch({ type: "setFile", file, previewUrl });
   }
 
   function handleRemoveFile() {
@@ -166,7 +193,10 @@ export function DraftFlow() {
     dispatch({ type: "startProcessing" });
 
     try {
-      const imageBase64 = await fileToBase64(state.imageFile);
+      const imageBase64 = await fileToBase64(
+        state.imageFile,
+        abortController.signal,
+      );
 
       if (abortController.signal.aborted) {
         return;
@@ -250,7 +280,7 @@ export function DraftFlow() {
           />
         </div>
 
-        <div className="py-4 lg:py-6">
+        <div ref={stageContainerRef} className="py-4 lg:py-6">
           {state.step === "processing" ? (
             <ProcessingStep onCancel={handleCancelGenerate} />
           ) : state.step === "review" && state.result ? (
