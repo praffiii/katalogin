@@ -1,24 +1,25 @@
 import { defineConfig, globalIgnores } from "eslint/config";
-import js from "@eslint/js";
-import globals from "globals";
-import tseslint from "typescript-eslint";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTypeScript from "eslint-config-next/typescript";
 
-const eslintConfig = defineConfig([
-  js.configs.recommended,
-  ...tseslint.configs.recommended,
+export default defineConfig([
+  ...nextVitals,
+  ...nextTypeScript,
   {
-    files: ["**/*.{js,mjs,ts,tsx}"],
-    languageOptions: {
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-      },
-    },
+    files: ["components/draft-flow/UploadStep.tsx"],
     rules: {
-      "no-undef": "off",
+      "@next/next/no-img-element": "off",
     },
   },
-  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
+  globalIgnores([
+    ".agents/**",
+    ".claude/**",
+    ".next/**",
+    "coverage/**",
+    "out/**",
+    "build/**",
+    "playwright-report/**",
+    "test-results/**",
+    "next-env.d.ts",
+  ]),
 ]);
-
-export default eslintConfig;

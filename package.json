@@ -2,15 +2,28 @@
   "name": "listify",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": "24.18.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint app components lib types --no-error-on-unmatched-pattern"
+    "lint": "eslint . --no-error-on-unmatched-pattern",
+    "typecheck": "tsc --noEmit --incremental false",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "doctor": "react-doctor . --verbose",
+    "check": "pnpm lint && pnpm typecheck && pnpm test:coverage && pnpm build"
   },
   "dependencies": {
     "@google/genai": "^2.7.0",
     "@phosphor-icons/react": "^2.1.10",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.38.0",
     "@vercel/analytics": "^2.0.1",
     "next": "^16.2.6",
     "react": "^19.2.6",
@@ -18,23 +31,29 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.61.1",
     "@tailwindcss/postcss": "^4.3.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^25.9.1",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
+    "@vitest/coverage-v8": "^4.1.10",
     "autoprefixer": "^10.5.0",
-    "eslint": "^10.4.1",
+    "eslint": "^9.39.5",
     "eslint-config-next": "^16.2.6",
-    "globals": "^17.6.0",
+    "jsdom": "^29.1.1",
     "postcss": "^8.5.15",
+    "react-doctor": "0.7.7",
     "tailwindcss": "^4.3.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.60.0"
+    "vitest": "^4.1.10"
   },
   "pnpm": {
     "overrides": {
-      "postcss": "^8.5.15"
+      "postcss": "^8.5.15",
+      "protobufjs": "7.6.3"
     }
   }
 }

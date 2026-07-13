@@ -5,6 +5,7 @@
   --surface: oklch(0.985 0 0);
   --surface-raised: oklch(0.97 0.003 145);
   --border: oklch(0.9 0.006 145);
+  --control-border: oklch(0.68 0.012 145);
   --ink: oklch(0.18 0.018 145);
   --muted: oklch(0.44 0.016 145);
   --primary: oklch(0.35 0.11 140);
@@ -25,6 +26,7 @@
   --color-surface: var(--surface);
   --color-surface-raised: var(--surface-raised);
   --color-border: var(--border);
+  --color-control-border: var(--control-border);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
   --color-primary: var(--primary);
